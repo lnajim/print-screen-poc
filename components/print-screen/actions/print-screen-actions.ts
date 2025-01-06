@@ -1,6 +1,7 @@
 "use server";
 
-import puppeteer from "puppeteer";
+import chromium from "@sparticuz/chromium" assert { type: "json" };
+import puppeteer from "puppeteer-core";
 import { z } from "zod";
 
 const urlSchema = z.string().url();
@@ -10,9 +11,15 @@ export async function takeScreenshot(url: string) {
     // Validate URL
     const validatedUrl = urlSchema.parse(url);
 
-    // Launch browser
+    // Configure Chrome for serverless environment
+    const executablePath = await chromium.executablePath();
+
+    // Launch browser with serverless configuration
     const browser = await puppeteer.launch({
-      headless: true,
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath,
+      headless: chromium.headless,
     });
 
     // Create new page
@@ -41,7 +48,7 @@ export async function takeScreenshot(url: string) {
 
     return {
       success: true,
-      screenshot: screenshot,
+      screenshot,
       error: null,
     };
   } catch (error) {
@@ -54,3 +61,4 @@ export async function takeScreenshot(url: string) {
     };
   }
 }
+s;
