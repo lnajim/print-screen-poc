@@ -1,6 +1,6 @@
 "use server";
 
-import chromium from "@sparticuz/chromium" assert { type: "json" };
+import chromium from "@sparticuz/chromium";
 import puppeteer from "puppeteer-core";
 import { z } from "zod";
 
